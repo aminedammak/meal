@@ -2,7 +2,10 @@ import React from "react";
 import { StyleSheet, Text, View, Button } from "react-native";
 import { MEALS } from "../data/dummy-data";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
-import { HeaderButton } from "../components/HeaderButton";
+import { Ionicons } from "@expo/vector-icons";
+import Colors from "../constants/Colors";
+
+import IoniconsHeaderButton from "../components/HeaderButton";
 
 export default function MealDetailScreen(props) {
   const mealId = props.navigation.getParam("mealId");
@@ -16,6 +19,7 @@ export default function MealDetailScreen(props) {
 
   return (
     <View style={styles.screen}>
+      <Ionicons name="ios-restaurant" size={28} color={Colors.accentColor} />
       <Text>MealDetailScreen screen</Text>
       <View>{mealDetails}</View>
       <Button
@@ -33,10 +37,10 @@ MealDetailScreen.navigationOptions = (navigationData) => {
     headerTitle: mealObject.title,
     headerRight: () => {
       return (
-        <HeaderButtons HeaderButtonComponent={HeaderButton}>
+        <HeaderButtons HeaderButtonComponent={IoniconsHeaderButton}>
           <Item
-            title="Favorite"
-            iconName="ios-search"
+            title="Fav"
+            iconName="ios-star"
             onPress={() => console.log("Marked a favorite")}
           />
         </HeaderButtons>

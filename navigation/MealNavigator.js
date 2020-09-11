@@ -18,6 +18,12 @@ const defaultStackNavOptions = {
       backgroundColor: Platform.OS === "android" ? Colors.primaryColor : "",
     },
     headerTintColor: Platform.OS === "android" ? "white" : Colors.primaryColor,
+    headerTitleStyle: {
+      fontFamily: "open-sans-bold",
+    },
+    headerBackTitleStyle: {
+      fontFamily: "open-sans",
+    },
   },
 };
 
@@ -79,6 +85,9 @@ const TabNavigator = createBottomTabNavigator(
   {
     tabBarOptions: {
       activeTintColor: "tomato",
+      labelStyle: {
+        fontFamily: "open-sans-bold",
+      },
     },
   }
 );

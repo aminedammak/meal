@@ -1,32 +1,60 @@
-import React from "react";
-import { StyleSheet, Text, View, Button } from "react-native";
+import React, { createFactory } from "react";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Button,
+  Image,
+  ScrollView,
+} from "react-native";
 import { MEALS } from "../data/dummy-data";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import { Ionicons } from "@expo/vector-icons";
 import Colors from "../constants/Colors";
 
 import IoniconsHeaderButton from "../components/HeaderButton";
+import DefaultText from "../components/DefaultText";
+
+const DetailName = (props) => {
+  return <Text style={props.style}>{props.children}</Text>;
+};
 
 export default function MealDetailScreen(props) {
   const mealId = props.navigation.getParam("mealId");
   const mealObject = MEALS.find((item) => item.id === mealId);
-  const mealDetails = (
-    <View>
-      <Text>{mealObject.title}</Text>
-      <Text>{mealObject.steps}</Text>
-    </View>
-  );
 
   return (
-    <View style={styles.screen}>
-      <Ionicons name="ios-restaurant" size={28} color={Colors.accentColor} />
-      <Text>MealDetailScreen screen</Text>
-      <View>{mealDetails}</View>
-      <Button
-        title="Go back to top"
-        onPress={() => props.navigation.popToTop()}
-      />
-    </View>
+    <ScrollView>
+      <View style={styles.screen}>
+        <Image
+          style={styles.detailsImage}
+          source={{
+            uri: mealObject.imageUrl,
+          }}
+        />
+        <View style={{ ...styles.mealRow, ...styles.mealDetail }}>
+          <DefaultText>{mealObject.duration}m</DefaultText>
+          <DefaultText>{mealObject.complexity.toUpperCase()}</DefaultText>
+          <DefaultText>{mealObject.affordability.toUpperCase()}</DefaultText>
+        </View>
+        <View style={styles.detailsContainer}>
+          <Text style={styles.title}>Ingredients</Text>
+          {mealObject.ingredients.map((item) => (
+            <DetailName key={item} style={styles.detailName}>
+              {item}
+            </DetailName>
+          ))}
+        </View>
+        <View style={styles.detailsContainer}>
+          <Text style={styles.title}>Steps</Text>
+          {mealObject.steps.map((item) => (
+            <DetailName key={item} style={styles.detailName}>
+              {item}
+            </DetailName>
+          ))}
+        </View>
+      </View>
+    </ScrollView>
   );
 }
 
@@ -54,5 +82,41 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+  },
+
+  detailsImage: {
+    width: "100%",
+    height: 200,
+  },
+  mealRow: {
+    flex: 1,
+    flexDirection: "row",
+    width: "100%",
+  },
+  mealDetail: {
+    paddingHorizontal: 10,
+    justifyContent: "space-between",
+    alignItems: "center",
+    height: "15%",
+  },
+  title: {
+    fontFamily: "open-sans-bold",
+    fontSize: 30,
+    marginHorizontal: 10,
+    marginVertical: 30,
+    marginBottom: 10,
+  },
+  detailName: {
+    padding: 15,
+    marginVertical: 10,
+    width: "100%",
+    borderColor: "#222",
+    borderStyle: "solid",
+    borderWidth: 1,
+  },
+  detailsContainer: {
+    padding: 10,
+    flex: 1,
+    width: "100%",
   },
 });

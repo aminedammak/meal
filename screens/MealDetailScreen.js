@@ -1,13 +1,6 @@
 import React, { useEffect } from "react";
-import { useDispatch } from "react-redux";
-import {
-  StyleSheet,
-  Text,
-  View,
-  Button,
-  Image,
-  ScrollView,
-} from "react-native";
+import { useDispatch, useSelector } from "react-redux";
+import { StyleSheet, Text, View, Image, ScrollView } from "react-native";
 import { MEALS } from "../data/dummy-data";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 
@@ -26,10 +19,19 @@ export default function MealDetailScreen(props) {
   const { navigation } = props;
 
   const dispatch = useDispatch();
+  const isFav = useSelector((state) => state.mealsReducer.favorites).some(
+    (item) => item.id === mealId
+  );
 
   useEffect(() => {
     navigation.setParams({ dispatch });
-  }, []);
+  }, [dispatch]);
+
+  let mealInFav = null;
+
+  useEffect(() => {
+    navigation.setParams({ isFav });
+  }, [isFav]);
 
   return (
     <ScrollView>
@@ -69,6 +71,7 @@ export default function MealDetailScreen(props) {
 MealDetailScreen.navigationOptions = (navigationData) => {
   const mealId = navigationData.navigation.getParam("mealId");
   const dispatch = navigationData.navigation.getParam("dispatch");
+  const isFav = navigationData.navigation.getParam("isFav");
   const mealObject = MEALS.find((item) => item.id === mealId);
   return {
     headerTitle: mealObject.title,
@@ -77,10 +80,9 @@ MealDetailScreen.navigationOptions = (navigationData) => {
         <HeaderButtons HeaderButtonComponent={IoniconsHeaderButton}>
           <Item
             title="Fav"
-            iconName="ios-star"
+            iconName={isFav ? "ios-star" : "ios-star-outline"}
             onPress={() => {
               dispatch(toggleFavoriteAction(mealId));
-              console.log("Marked a favorite");
             }}
           />
         </HeaderButtons>

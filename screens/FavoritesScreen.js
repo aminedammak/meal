@@ -1,12 +1,14 @@
 import React from "react";
-import { View, Text, FlatList, StyleSheet } from "react-native";
+import { useSelector } from "react-redux";
+import { StyleSheet } from "react-native";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import IoniconsHeaderButton from "../components/HeaderButton";
 
-import { FAVORITES_MEALS } from "../data/dummy-data";
 import MealList from "../components/MealList";
 
 const FavoritesScreen = (props) => {
+  const FAVORITES_MEALS = useSelector((state) => state.mealsReducer.favorites);
+
   return (
     <MealList displayedMeals={FAVORITES_MEALS} navigation={props.navigation} />
   );

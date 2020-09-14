@@ -1,4 +1,5 @@
-import React, { createFactory } from "react";
+import React, { useEffect } from "react";
+import { useDispatch } from "react-redux";
 import {
   StyleSheet,
   Text,
@@ -9,11 +10,11 @@ import {
 } from "react-native";
 import { MEALS } from "../data/dummy-data";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
-import { Ionicons } from "@expo/vector-icons";
-import Colors from "../constants/Colors";
 
 import IoniconsHeaderButton from "../components/HeaderButton";
 import DefaultText from "../components/DefaultText";
+
+import { toggleFavoriteAction } from "../store/actions/mealsActions";
 
 const DetailName = (props) => {
   return <Text style={props.style}>{props.children}</Text>;
@@ -22,6 +23,13 @@ const DetailName = (props) => {
 export default function MealDetailScreen(props) {
   const mealId = props.navigation.getParam("mealId");
   const mealObject = MEALS.find((item) => item.id === mealId);
+  const { navigation } = props;
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    navigation.setParams({ dispatch });
+  }, []);
 
   return (
     <ScrollView>
@@ -60,6 +68,7 @@ export default function MealDetailScreen(props) {
 
 MealDetailScreen.navigationOptions = (navigationData) => {
   const mealId = navigationData.navigation.getParam("mealId");
+  const dispatch = navigationData.navigation.getParam("dispatch");
   const mealObject = MEALS.find((item) => item.id === mealId);
   return {
     headerTitle: mealObject.title,
@@ -69,7 +78,10 @@ MealDetailScreen.navigationOptions = (navigationData) => {
           <Item
             title="Fav"
             iconName="ios-star"
-            onPress={() => console.log("Marked a favorite")}
+            onPress={() => {
+              dispatch(toggleFavoriteAction(mealId));
+              console.log("Marked a favorite");
+            }}
           />
         </HeaderButtons>
       );

@@ -1,16 +1,21 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { StyleSheet } from "react-native";
+import { StyleSheet, View, Text } from "react-native";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import IoniconsHeaderButton from "../components/HeaderButton";
 
 import MealList from "../components/MealList";
+import DefaultText from "../components/DefaultText";
 
 const FavoritesScreen = (props) => {
   const FAVORITES_MEALS = useSelector((state) => state.mealsReducer.favorites);
 
-  return (
+  return FAVORITES_MEALS.length > 0 ? (
     <MealList displayedMeals={FAVORITES_MEALS} navigation={props.navigation} />
+  ) : (
+    <View style={styles.content}>
+      <DefaultText>No Favorites meals found. Start adding some!</DefaultText>
+    </View>
   );
 };
 
@@ -35,6 +40,11 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     padding: 15,
+  },
+  content: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
 
